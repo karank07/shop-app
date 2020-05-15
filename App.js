@@ -1,19 +1,38 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { Provider, useSelector } from 'react-redux';
+import { createStore, combineReducers } from 'redux';
+import { AppLoading } from 'expo';
+import * as Font from 'expo-font';
+
+import productReducer from './store/reducers/productReducer';
+import cartReducer from './store/reducers/CartReducer';
+import orderReducer from './store/reducers/OrderReducer';
+import ShopNavigator from './navigation/ShopNavigator';
+
+const rootReducer = combineReducers(
+  {
+    products: productReducer,
+    cart: cartReducer,
+    orders: orderReducer
+  });
+const fetchFonts = () => {
+  return Font.loadAsync({
+    'open-sans': require('./assets/Fonts/OpenSans-Regular.ttf'),
+
+    'open-sans-bold': require('./assets/Fonts/OpenSans-Bold.ttf')
+  })
+}
+const store = createStore(rootReducer);
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  const [loaded, setLoaded] = useState(false);
+  if (!loaded) {
+    return <AppLoading startAsync={fetchFonts} onFinish={() => setLoaded(true)} />;
+  }
+  return (
+    <Provider store={store}>
+      <ShopNavigator />
+    </Provider>
+  );
+};
