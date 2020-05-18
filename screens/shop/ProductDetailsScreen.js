@@ -53,7 +53,8 @@ const styles = StyleSheet.create({
     desc: {
         fontSize: 14,
         marginHorizontal: 20,
-        fontFamily: 'open-sans'
+        fontFamily: 'open-sans',
+        textAlign: 'center'
     },
     img: {
         height: 250,
